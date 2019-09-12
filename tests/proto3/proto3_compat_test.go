@@ -131,15 +131,25 @@ func TestMultidimensionalByteArraysAndSlices(t *testing.T) {
 		[2]byte{1, 2},
 		[2]byte{3, 4}}
 
-	_, err := cdc.MarshalBinaryBare(arr)
+	bz, err := cdc.MarshalBinaryBare(arr)
 	assert.NoError(t, err, "unexpected error: multidimensional arrays are allowed, as long as they are only of bytes")
+	var a [][]byte
+	cdc.UnmarshalBinaryBare(bz, &a)
+	t.Log(bz, "arr")
+	// require.Equal(t, bz, a)
+	t.Log(a, "arr")
 
 	s := [][]byte{
 		[]byte{1, 2},
 		[]byte{3, 4, 5}}
 
-	_, err = cdc.MarshalBinaryBare(s)
+	bx, err := cdc.MarshalBinaryBare(s)
 	assert.NoError(t, err, "unexpected error: multidimensional slices are allowed, as long as they are only of bytes")
+	var b [][]byte
+	t.Log(bz, "s")
+	cdc.UnmarshalBinaryBare(bx, &b)
+	t.Log(b, "s")
+	require.Equal(t, bx, b)
 
 	s2 := [][][]byte{
 		[][]byte{
